@@ -161,9 +161,8 @@ def ex(file_png, file_txt, file_out):
     with open(file_out,'w') as f:
         for d in final:
             d=str(d)
-            # d=str(d)
-            # d = d.replace('[','')
-            # d = d.replace(']','')
+            d = d.replace('[','')
+            d = d.replace(']','')
             d = d.replace(' ','')
             f.writelines(d+'\n')
     with open(file_txt) as f:
