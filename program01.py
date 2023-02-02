@@ -122,39 +122,22 @@ from pngmatrix import load_png8
 'from line 122 to 175 perfectly working (tested)'
 def ex(file_png, file_txt, file_out):
     image = load_png8(file_png)
-    #print(len(image[0]))#[[(255, 0, 0), (255, 0, 0), (0, 0, 0), (0, 0, 0), (0, 0, 0), (0, 0, 0)], [(255, 0, 0), (255, 0, 0), (0, 0, 0), (0, 0, 0), (0, 0, 0), (0, 0, 0)], [(0, 0, 0), (0, 0, 0), (0, 0, 0), (0, 0, 0), (0, 0, 0), (0, 0, 0)], [(0, 0, 0), (0, 0, 0), (0, 0, 0), (0, 0, 0), (0, 0, 0), (0, 0, 0)], [(0, 0, 0), (0, 0, 0), (0, 0, 0), (0, 0, 0), (0, 255, 0), (0, 255, 0)], [(0, 0, 0), (0, 0, 0), (0, 0, 0), (0, 0, 0), (0, 255, 0), (0, 255, 0)]]#load_png8(file_png)
+    #print(image)#[[(255, 0, 0), (255, 0, 0), (0, 0, 0), (0, 0, 0), (0, 0, 0), (0, 0, 0)], [(255, 0, 0), (255, 0, 0), (0, 0, 0), (0, 0, 0), (0, 0, 0), (0, 0, 0)], [(0, 0, 0), (0, 0, 0), (0, 0, 0), (0, 0, 0), (0, 0, 0), (0, 0, 0)], [(0, 0, 0), (0, 0, 0), (0, 0, 0), (0, 0, 0), (0, 0, 0), (0, 0, 0)], [(0, 0, 0), (0, 0, 0), (0, 0, 0), (0, 0, 0), (0, 255, 0), (0, 255, 0)], [(0, 0, 0), (0, 0, 0), (0, 0, 0), (0, 0, 0), (0, 255, 0), (0, 255, 0)]]#load_png8(file_png)
     x =-1
     y =-1
     rectlist = []
     final = []
-    def manager1(x,y,pixel,w,h):
-        r = pixel[0]
-        g = pixel[1]
-        b = pixel[2]
-        return [x,y,w,h,r,g,b]
-    w = 0
-    h = 0
-    old = image[0][0]
-    for row in image:
-        y +=1
-        x = -1
-        old = 0
-        for pixel in row:
-            x+=1
-            if pixel != (0, 0, 0):
+    for y,row in enumerate(image):
+        for x,pixel in enumerate(row):
+            if pixel != (0 ,0 ,0):
                 if pixel not in rectlist:
                     rectlist.append(pixel)
-                    w = 1
-                    final.append(manager1(x,y,pixel,w,h))
-                    old = 1
-                    continue
+                    final.append([x,y,1,1,pixel[0],pixel[1],pixel[2]])
                 if pixel in rectlist:
-                    for c in final:
-                        if (c[4],c[5],c[6]) == pixel:
-                            if old == 1:
-                                c[2] += 1
-                            if old == 0:
-                                c[3] += 1
+                    for i in range(len(final)):
+                        if list(final[i][4:]) == list(pixel):
+                            final[i][2]= x - final[i][0] +1
+                            final[i][3]= y - final[i][1] +1
     def sorter(c):
         return (c[1],-c[0])
     final = sorted(final,key = sorter,reverse = True)
@@ -170,7 +153,6 @@ def ex(file_png, file_txt, file_out):
         num = num.split()
     result = []
     for a, b, c in zip(num[::3],num[1::3],num[2::3]):
-        #print([a,b,c])
         '''a=width,b=height,c=length of hatch'''
         a = int(a)
         b= int(b)
@@ -204,19 +186,17 @@ def ex(file_png, file_txt, file_out):
                        [**]++**
                        [**]++**
                        [**]++**
-                           **
-                           **'''
+                          **
+                          **'''
             mx1 = p-c
             my1 = q+c 
-            if mx1 <0 or my1<len(image):
+            if mx1 <0 or my1<0:
                 return None
-            else:    
-                for mx in range(mx1,mx1+c):
-                    for my in range(my1,my1+b):
-                        #if my<len(image):
-                            if image[my][mx] != (0,0,0):
-                                return None
-                return True
+            for mx in range(mx1,mx1+c):
+                for my in range(my1,my1+b):
+                    if image[my][mx] != (0,0,0):
+                        return None
+            return True
         def checker3(p,q,b,c):
             '''checker1 is supposed to check the portion indicated by third bracket
                        **
