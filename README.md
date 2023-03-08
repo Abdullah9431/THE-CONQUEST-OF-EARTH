@@ -1,4 +1,5 @@
-# The Caponians, an alien strain coming from an unspecified planet in
+#Description of problem
+The Caponians, an alien strain coming from an unspecified planet in
 the galaxy, have been planning for quite a while the invasion of the
 planet Earth. To do this, they have created and installed in various
 points of the planet "mind bending machines". This machinery reduces
